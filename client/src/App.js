@@ -9,10 +9,6 @@ const App = () => {
 return(
 <>
 <Search />
-{/* <Switch>
-<Route exact path='/'><Home /></Route> */}
-{/* <Route path='/'>< /></Route> */}
-{/* </Switch> */}
 </>
 )};
 
