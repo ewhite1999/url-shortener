@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
 
 class URLS(db.Model):
-    long_url = db.Column(db.String(200), unique=True, nullable=False)
+    long_url = db.Column(db.String(10), unique=True, nullable=False)
     short_url = db.Column(db.String(200), unique=True, nullable=False)
 
 
