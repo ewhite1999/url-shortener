@@ -1,4 +1,5 @@
 
+from email import message
 from http import server
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
@@ -37,9 +38,7 @@ def urls_routes():
         try:
             newData = request.json
             long_url = newData['long_url']
-            # TODO: make this function
             short_url = helpers.shorten_url(long_url)
-            # TODO: need to check if URL already in db first (try except block)
             newUrl = URLS(long_url=long_url, short_url=short_url)
             db.session.add(newUrl)
             db.session.commit()
@@ -49,10 +48,12 @@ def urls_routes():
 
         except exc.IntegrityError as err:
             db.session.rollback()
+            # long_url =  err.params[0]
             errMessage = str(err.orig)
             if(errMessage == 'UNIQUE constraint failed: URLS.long_url'):
-                # TODO: this catches what happens if they try to add a url we already have, make it so it returns the object
-                return errMessage
+                prior_url = helpers.find_short_url(long_url, URLS)
+                return jsonify({'message': 'We have already shortened that url!', 'long_url': long_url, 'short_url': prior_url})
+
             return 'oops something went wrong, please try again'
 
 
