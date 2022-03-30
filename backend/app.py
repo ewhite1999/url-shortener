@@ -48,9 +48,9 @@ def urls_routes():
 
             if(errMessage == 'UNIQUE constraint failed: URLS.long_url'):
                 prior_url = helpers.find_short_url(long_url, URLS)
-                return jsonify({'message': 'We have already shortened that url!', 'long_url': long_url, 'short_url': prior_url})
+                return jsonify({'message': 'We have already shortened that url!', 'long_url': long_url, 'short_url': prior_url}), 200
 
-            return 'oops something went wrong, please try again'
+            return 'oops something went wrong, please try again', 500
 
 
 @app.route('/<url>')
@@ -63,7 +63,7 @@ def get_by_url(url):
 
     except AttributeError:
         # TODO: this needs to reroute them to the homepage
-        return "We haven't made a url for that"
+        return "We haven't made a url for that", 404
 
 
 if __name__ == "__main__":
