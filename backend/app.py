@@ -58,6 +58,9 @@ def urls_routes():
 
 @app.route('/<url>')
 def get_by_url(url):
-    long_url = helpers.find_long_url(url, URLS)
-    print(long_url)
-    return(long_url), 200
+    try:
+        long_url = helpers.find_long_url(url, URLS)
+        return(long_url), 200
+    except AttributeError:
+        # TODO: this needs to reroute them to the homepage
+        return "We haven't made a url for that"
