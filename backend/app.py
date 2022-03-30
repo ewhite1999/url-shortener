@@ -17,7 +17,7 @@ class URLS(db.Model):
 
 @app.route('/')
 def home():
-    return 'Hello, World!'
+    return 'Hello, World!', 200
 
 
 @app.route('/urls', methods=['GET', 'POST'])

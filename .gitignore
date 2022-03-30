@@ -2,3 +2,5 @@
 __pycache__
 urls.db
 node_modules
+.coverage
+.pytest_cache
