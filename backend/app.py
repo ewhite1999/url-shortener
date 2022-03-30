@@ -1,8 +1,9 @@
-import controller
+
 from http import server
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from helpers import shorten_url
+from sqlalchemy import exc
+import helpers
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///urls.db'
 db = SQLAlchemy(app)
@@ -25,18 +26,38 @@ def home():
 
 @app.route('/urls', methods=['GET', 'POST'])
 def urls_routes():
+    # TODO: remove this before production
     if request.method == 'GET':
-        return controller.show_all(URLS), 200
+        urls = URLS.query.all()
+        urlsList = [{'long_url': url.long_url, 'short_url': url.short_url}
+                    for url in urls]
+        return jsonify(urlsList), 200
 
     if request.method == 'POST':
-        newData = request.json
-        long_url = newData['long_url']
-        # TODO: make this function
-        short_url = shorten_url(long_url)
-        # TODO: need to check if URL already in db first (try except block)
-        newUrl = URLS(long_url=long_url, short_url=short_url)
-        db.session.add(newUrl)
-        db.session.commit()
-        urlsList = {'long_url': long_url, 'short_url': short_url}
+        try:
+            newData = request.json
+            long_url = newData['long_url']
+            # TODO: make this function
+            short_url = helpers.shorten_url(long_url)
+            # TODO: need to check if URL already in db first (try except block)
+            newUrl = URLS(long_url=long_url, short_url=short_url)
+            db.session.add(newUrl)
+            db.session.commit()
+            urlsList = {'long_url': long_url, 'short_url': short_url}
 
-        return jsonify(urlsList), 201
+            return jsonify(urlsList), 201
+
+        except exc.IntegrityError as err:
+            db.session.rollback()
+            errMessage = str(err.orig)
+            if(errMessage == 'UNIQUE constraint failed: URLS.long_url'):
+                # TODO: this catches what happens if they try to add a url we already have, make it so it returns the object
+                return errMessage
+            return 'oops something went wrong, please try again'
+
+
+@app.route('/<url>')
+def get_by_url(url):
+    long_url = helpers.find_long_url(url, URLS)
+    print(long_url)
+    return(long_url), 200
