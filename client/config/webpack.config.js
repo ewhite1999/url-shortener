@@ -39,10 +39,7 @@ const config = {
       }, 
       { 
         test: /\.(png|jpg|jpeg|pdf|ico)$/,
-        resolve: {
-          extensions: ['.ico', '.jpeg']
-        },
-        loader: ['file-loader'],
+        use: ['file-loader'],
       }, 
     ]
   }
