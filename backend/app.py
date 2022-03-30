@@ -57,13 +57,10 @@ def urls_routes():
 def get_by_url(url):
     try:
         long_url = helpers.find_long_url(url, URLS)
-        # TODO: this needs to reroute the to the url
-
-        return(long_url), 200
+        return jsonify({'long_url': long_url}), 200
 
     except AttributeError:
-        # TODO: this needs to reroute them to the homepage
-        return "We haven't made a url for that", 404
+        return jsonify({'message': 'We haven\'t made a url for that'}), 404
 
 
 if __name__ == "__main__":
