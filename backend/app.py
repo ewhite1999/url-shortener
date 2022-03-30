@@ -1,5 +1,6 @@
+
 from http import server
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -20,3 +21,12 @@ class URLS(db.Model):
 @app.route('/')
 def home():
     return 'Hello, World!'
+
+
+@app.route('/urls', methods=['GET', 'POST'])
+def urls_routes():
+    if request.method == 'GET':
+        urls = URLS.query.all()
+        urlsList = [{'long_url': url.long_url, 'short_url': url.short_url}
+                    for url in urls]
+        return jsonify(urlsList), 200
