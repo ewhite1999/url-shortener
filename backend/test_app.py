@@ -20,3 +20,7 @@ class TestRoutes():
         res = api.get('/')
         assert res.data == b'Hello, World!'
         assert res.status == '200 OK'
+
+    def test_get_by_url(self, api):
+        res = api.get('/oh_no')
+        assert b"We haven\'t made a url for that" in res.data
