@@ -9,3 +9,8 @@ db = SQLAlchemy(app)
 
 if __name__ == "__main__":
     server.run(debug=True)
+
+
+@app.route('/')
+def home():
+    return 'Hello, World!'
