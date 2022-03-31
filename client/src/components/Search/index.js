@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const Search = () => {
+  // window.onload = function () {
+  //   location.href = "https://www.javascripttutorial.net/";
+  // };
   const [shortURL, setShortURL] = useState("");
   const [longURL, setLongURL] = useState("");
   const [message, setMessage] = useState("");
@@ -22,6 +25,7 @@ const Search = () => {
     const message = responseData.message;
     if (message) setMessage(message);
     setShortURL(`http://localhost:8080/${responseData.short_url}`);
+    e.target.reset();
   };
   return (
     <>
