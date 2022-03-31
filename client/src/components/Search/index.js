@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 const Search = () => {
-  const handleSubmit = (e) => {
+  const [shortURL, setShortURL] = useState("");
+  const [longURL, setLongURL] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e.target);
+    const url = e.target.url.value;
+    setLongURL(url);
+    const data = { long_url: url };
+    const extra = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const result = await axios.post("http://127.0.0.1:5000/urls", data, extra);
+    const responseData = result.data;
+    const message = responseData.message;
+    if (message) setMessage(message);
+    setShortURL(`http://localhost:8080/${responseData.short_url}`);
   };
   return (
     <>
@@ -14,6 +32,11 @@ const Search = () => {
         <input type="input" id="url" name="url" placeholder="Paste Link Here" />
         <input type="submit" />
       </form>
+      <div>
+        {message && <p>We already processed that url, here you go</p>}
+        <p>Long URL: {longURL}</p>
+        <p>Short URL: {shortURL}</p>
+      </div>
     </>
   );
 };
