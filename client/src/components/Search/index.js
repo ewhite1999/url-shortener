@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const Search = () => {
-  // window.onload = function () {
-  //   location.href = "https://www.javascripttutorial.net/";
-  // };
   const [shortURL, setShortURL] = useState("");
   const [longURL, setLongURL] = useState("");
   const [message, setMessage] = useState("");
@@ -13,6 +10,7 @@ const Search = () => {
     e.preventDefault();
     const url = e.target.url.value;
     setLongURL(url);
+
     const data = { long_url: url };
     const extra = {
       method: "POST",
@@ -23,6 +21,7 @@ const Search = () => {
     const result = await axios.post("http://127.0.0.1:5000/urls", data, extra);
     const responseData = result.data;
     const message = responseData.message;
+
     if (message) setMessage(message);
     setShortURL(`http://localhost:8080/${responseData.short_url}`);
     e.target.reset();
