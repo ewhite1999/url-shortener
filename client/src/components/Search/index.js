@@ -37,8 +37,8 @@ const Search = () => {
       </form>
       <div>
         {message && <p>We already processed that url, here you go</p>}
-        <a href={longURL}>Long URL: {longURL}</a>
-        <a href={shortURL}>Short URL: {shortURL}</a>
+        {longURL && <a href={longURL}>Long URL: {longURL}</a>}
+        {shortURL && <a href={shortURL}>Short URL: {shortURL}</a>}
       </div>
     </>
   );
