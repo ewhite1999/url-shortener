@@ -1,0 +1,6 @@
+.DS_Store
+__pycache__
+urls.db
+node_modules
+.coverage
+.pytest_cache
